@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-native",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "incremental": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "exactOptionalPropertyTypes": false
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "example",
+    "__tests__",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ]
+}
