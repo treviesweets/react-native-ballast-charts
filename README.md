@@ -1,292 +1,329 @@
-# 📈 React Native Simple Charts
+# React Native Ballast Charts
 
-[![npm version](https://badge.fury.io/js/react-native-simple-charts.svg)](https://badge.fury.io/js/react-native-simple-charts)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://badgen.net/badge/built%20with/TypeScript/blue)](https://www.typescriptlang.org/)
+A high-performance, interactive chart library for React Native with advanced gap handling and financial data visualization.
 
-As we worked on our app www.get-ballast.com we felt that there was a gap in the market for a **lightweight**, **high-performance**, **interactive** charting library for React Native designed that could display data with varying x and y spacing accurately. Built with TypeScript, optimized for 60fps interactions, and featuring **dynamic padding** for optimal space usage.
+[![npm version](https://img.shields.io/npm/v/react-native-ballast-charts.svg?style=flat-square)](https://www.npmjs.com/package/react-native-ballast-charts)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-ballast-charts.svg?style=flat-square)](https://www.npmjs.com/package/react-native-ballast-charts)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
+[![React Native](https://img.shields.io/badge/React%20Native-0.70+-green.svg?style=flat-square)](https://reactnative.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-## ✨ Features
+## Features
 
-- 🚀 **High Performance**: 60fps smooth interactions, worklet-safe gesture handling
-- 📱 **Mobile Optimized**: Dynamic padding adapts to screen space and axis visibility
-- 🎯 **Interactive**: Draggable crosshair with real-time tooltip and callbacks
-- 📊 **Flexible**: Single component supports line charts and distribution graphs  
-- 🔧 **TypeScript**: Full type safety with excellent IntelliSense support
-- 💰 **Financial Focus**: Built for stock prices, time series, and probability distributions
-- 🎨 **Customizable**: Comprehensive styling options with sensible defaults
-- ⚡ **Zero Config**: Works out of the box, extensive configuration available
+- 📊 **Interactive Charts**: Touch-responsive charts with crosshair and tooltip support
+- 🎯 **High Performance**: Optimized for 60fps with React Native Reanimated worklets
+- 📈 **Smooth Curves**: Multiple smoothing algorithms (Bézier, Catmull-Rom, Cardinal)
+- ⏸️ **Advanced Gap Handling**: Both proportional and fixed-width gap visualization
+- 🎨 **Customizable Styling**: Comprehensive theming and styling options
+- 📱 **React Native Optimized**: Built specifically for mobile performance
 
-## 📱 Demo
+## Screenshots
 
-```tsx
-import { Chart } from 'react-native-simple-charts';
+| Line Chart | Distribution Chart |
+|------------|-------------------|
+| ![Line Chart](./example/line_graph.jpeg) | ![Distribution Chart](./example/distribution.jpeg) |
+| Interactive stock price chart with smooth curves and gap handling | Distribution visualization with optimized padding |
 
-const stockData = {
-  x: [1640995200000, 1641081600000, 1641168000000], // timestamps
-  y: [150.5, 152.3, 148.7] // prices
-};
-
-<Chart
-  data={stockData}
-  width={350}
-  height={200}
-  axes={{ x: { show: true }, y: { show: true } }}
-  interaction={{ enabled: true }}
-/>
-```
-
-## 📦 Installation
+## Installation
 
 ```bash
-npm install react-native-simple-charts
+npm install react-native-ballast-charts
 ```
 
-### Required Peer Dependencies
+### Peer Dependencies
+
+This library requires the following peer dependencies:
 
 ```bash
 npm install react-native-reanimated react-native-gesture-handler react-native-svg
 ```
 
-For Expo projects:
-```bash
-expo install react-native-reanimated react-native-gesture-handler react-native-svg
-```
+Follow the installation guides for each:
+- [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)
+- [React Native Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
+- [React Native SVG](https://github.com/software-mansion/react-native-svg#installation)
 
-## 🛠 Setup
 
-1. Follow setup guides for peer dependencies:
-   - [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)
-   - [React Native Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
-   - [React Native SVG](https://github.com/software-mansion/react-native-svg)
-
-2. Wrap your app with `GestureHandlerRootView`:
+## Quick Start
 
 ```tsx
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Chart } from 'react-native-ballast-charts';
 
-export default function App() {
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* Your app content */}
-    </GestureHandlerRootView>
-  );
-}
-```
-
-## 📖 API Reference
-
-### Core Props
-
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `data` | `ChartData` | ✅ | Chart data with x/y arrays |
-| `width` | `number` | ✅ | Chart width in pixels |
-| `height` | `number` | ✅ | Chart height in pixels |
-| `axes` | `AxisConfig` | ❌ | Axis configuration (enables dynamic padding) |
-| `interaction` | `InteractionConfig` | ❌ | Enable drag interactions |
-| `lineStyle` | `LineStyle` | ❌ | Line appearance and smoothing |
-| `fillStyle` | `FillStyle` | ❌ | Fill area for distributions |
-| `padding` | `Padding` | ❌ | Manual padding override (optional) |
-
-### Data Format
-
-```tsx
-interface ChartData {
-  x: number[];  // X-axis values (timestamps, prices, etc.)
-  y: number[];  // Y-axis values (prices, probabilities, etc.)
-}
-```
-
-**Important Notes:**
-- Arrays must have the same length
-- No null/undefined values allowed
-- Library handles uneven time spacing automatically
-- Optimal performance with ≤50 data points
-
-## 🎯 Examples
-
-### Stock Price Chart with Axes
-
-```tsx
-import { Chart } from 'react-native-simple-charts';
-
-const StockChart = () => {
-  const stockData = {
-    x: [1640995200000, 1641081600000, 1641168000000],
-    y: [150.5, 152.3, 148.7]
-  };
-
-  return (
-    <Chart
-      data={stockData}
-      width={350}
-      height={200}
-      axes={{
-        x: { show: true }, // Dates on X-axis
-        y: { show: true }  // Prices on Y-axis
-      }}
-      lineStyle={{ 
-        color: '#2563eb', 
-        width: 2,
-        smoothing: 'bezier' 
-      }}
-      interaction={{ 
-        enabled: true,
-        onDrag: (x, y, index) => {
-          console.log(`Price: $${y.toFixed(2)} on ${new Date(x).toLocaleDateString()}`);
-        }
-      }}
-      indicators={[
-        { x: 1641168000000, color: '#ef4444', label: 'Event' }
-      ]}
-    />
-  );
-};
-```
-
-### Distribution Chart (Minimal Padding)
-
-```tsx
-const DistributionChart = () => {
+const MyChart = () => {
   const data = {
-    x: [100, 110, 120, 130, 140, 150],
-    y: [0.1, 0.3, 0.4, 0.3, 0.2, 0.1]
+    x: [1640995200000, 1641081600000, 1641168000000], // timestamps
+    y: [100, 120, 110] // values
   };
 
   return (
     <Chart
       data={data}
-      width={350}
+      width={300}
       height={200}
-      // No axes = automatic minimal padding for maximum space
-      lineStyle={{ color: '#10b981' }}
-      fillStyle={{ enabled: true, color: '#10b981', opacity: 0.2 }}
-      interaction={{ enabled: true }}
+      lineStyle={{
+        color: '#007AFF',
+        width: 2,
+        smoothing: 'bezier'
+      }}
     />
   );
 };
 ```
 
-### Interactive Chart with Custom Tooltip
+## Gap Handling
 
-```tsx
-const InteractiveChart = () => {
-  const [highlightedPoint, setHighlightedPoint] = useState(null);
+This library provides sophisticated gap handling for time series data with missing periods.
 
-  return (
-    <>
-      <Chart
-        data={stockData}
-        width={350}
-        height={200}
-        axes={{ x: { show: true }, y: { show: true } }}
-        interaction={{
-          enabled: true,
-          onDrag: (x, y, index) => {
-            setHighlightedPoint({
-              date: new Date(x).toLocaleDateString(),
-              price: `$${y.toFixed(2)}`
-            });
-          }
-        }}
-      />
-      
-      {highlightedPoint && (
-        <View style={styles.tooltip}>
-          <Text>Date: {highlightedPoint.date}</Text>
-          <Text>Price: {highlightedPoint.price}</Text>
-        </View>
-      )}
-    </>
-  );
-};
-```
+### Gap Detection
 
-## 💡 Dynamic Padding System
-
-**Automatic Space Optimization** - Charts automatically adjust padding based on axis visibility:
-
-```tsx
-// Axes shown: 60px left, 40px bottom (space for labels)
-<Chart axes={{ x: { show: true }, y: { show: true } }} />
-
-// Axes hidden: 20px minimal padding (maximum chart space)
-<Chart /> // or axes={{ x: { show: false }, y: { show: false } }}
-```
-
-**Space Savings:**
-- **Mobile phones**: Up to 16% more chart space when axes are hidden
-- **Automatic**: No configuration needed
-- **Override**: Manual padding still available when needed
-
-## ⚡ Performance Guidelines
-
-- **Data Points**: Limit to 50 points for optimal 60fps performance
-- **Updates**: Use `useMemo` for data transformations  
-- **Memory**: Library automatically manages gesture handling on UI thread
-- **Smoothing**: Bezier/Catmull-Rom smoothing adds minimal overhead
-
-## 🎨 Customization
-
-### Line Smoothing
+Gaps are automatically detected when the time interval between consecutive data points exceeds a threshold:
 
 ```tsx
 <Chart
-  lineStyle={{
-    smoothing: 'bezier',    // 'none' | 'bezier' | 'catmull-rom' | 'cardinal'
-    tension: 0.4,           // 0-1, affects curve tightness
-    color: '#2563eb',
-    width: 2
+  data={data}
+  gaps={{
+    enabled: true,
+    threshold: 2.5 // Gap detected when interval > 2.5x median interval
   }}
 />
 ```
 
-### Advanced Styling
+### Proportional Gaps (Default)
+
+By default, gaps are rendered proportionally to their time duration:
 
 ```tsx
 <Chart
-  lineStyle={{ color: '#2563eb', width: 3, opacity: 0.8 }}
-  fillStyle={{ enabled: true, color: '#2563eb', opacity: 0.1 }}
-  padding={{ top: 20, right: 20, bottom: 40, left: 60 }} // Manual override
+  data={data}
+  gaps={{
+    enabled: true,
+    threshold: 2.5,
+    style: {
+      color: '#999',
+      width: 1,
+      dashArray: '4 4'
+    }
+  }}
 />
 ```
 
-## 🐛 Troubleshooting
+**Behavior**: A 1-week gap will appear larger than a 1-day gap, proportional to their time difference.
 
-**Charts not rendering:**
-- Ensure peer dependencies are installed and configured
-- Check data format (arrays of same length, no null values)
-- Verify chart dimensions are positive numbers
+### Fixed Width Gaps
 
-**Gestures not working:**
-- Wrap app with `GestureHandlerRootView`
-- Enable with `interaction={{ enabled: true }}`
-- Check that chart has sufficient size for touch targets
+For consistent visual representation regardless of gap duration:
 
-**Performance issues:**
-- Limit data points to ≤50 for optimal performance
-- Use `useMemo` for expensive data processing
-- Avoid frequent data updates (>30fps)
+```tsx
+<Chart
+  data={data}
+  gaps={{
+    enabled: true,
+    threshold: 2.5,
+    fixedWidthGaps: true,
+    fixedWidth: 40, // All gaps appear as exactly 40px
+    style: {
+      color: '#999',
+      width: 1,
+      dashArray: '2 3'
+    }
+  }}
+/>
+```
 
-**TypeScript errors:**
-- Ensure you're importing types: `import type { ChartData } from 'react-native-simple-charts'`
-- Check peer dependency versions match requirements
+**Behavior**: All gaps appear as the same visual width (40px by default), regardless of their actual time duration.
 
-## 📄 License
+#### How Fixed Width Gaps Work
 
-MIT License - see [LICENSE](LICENSE) file for details.
+1. **Gap Detection**: Identifies time periods where data is missing
+2. **Segment Division**: Divides the timeline into continuous data segments separated by gaps
+3. **Consistent Scaling**: Applies uniform time-to-pixel scaling across all segments
+4. **Fixed Gap Insertion**: Inserts exactly `fixedWidth` pixels between segments
 
-## 🤝 Contributing
+**Example**: With a 1-week dataset containing weekend gaps:
+- **Proportional**: Weekend gaps appear larger than weekday gaps
+- **Fixed Width**: All gaps appear identical (e.g., 40px), maintaining visual consistency
 
-Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+#### When to Use Fixed Width Gaps
 
-## 🔗 Links
+- **Financial Charts**: Trading hours vs. market closures
+- **Business Metrics**: Weekdays vs. weekends  
+- **Sensor Data**: Regular maintenance periods
+- **Any scenario** where gap duration shouldn't distort visual analysis
 
-- [GitHub Repository](https://github.com/yourusername/react-native-simple-charts)
-- [NPM Package](https://www.npmjs.com/package/react-native-simple-charts)
-- [Issue Tracker](https://github.com/yourusername/react-native-simple-charts/issues)
+### Gap Configuration Options
 
----
+```tsx
+interface GapConfig {
+  enabled: boolean;                    // Enable gap detection
+  threshold?: number;                  // Gap threshold multiplier (default: 2.0)
+  fixedWidthGaps?: boolean;           // Use fixed width gaps
+  fixedWidth?: number;                // Fixed gap width in pixels (default: 40)
+  style?: {
+    color?: string;                   // Gap indicator color
+    width?: number;                   // Gap indicator line width
+    dashArray?: string;               // Dash pattern (e.g., "4 4", "2 3")
+  };
+}
+```
 
-Built with ❤️ for the React Native community
+## Chart Props
+
+### Core Props
+
+```tsx
+interface ChartProps {
+  data: ChartData;                    // Chart data
+  width: number;                      // Chart width
+  height: number;                     // Chart height
+  padding?: Padding;                  // Chart padding
+  style?: ViewStyle;                  // Container styling
+}
+
+interface ChartData {
+  x: number[];                        // X-axis data (usually timestamps)
+  y: number[];                        // Y-axis data (values)
+}
+```
+
+### Styling Props
+
+```tsx
+interface LineStyle {
+  color?: string;                     // Line color
+  width?: number;                     // Line width
+  opacity?: number;                   // Line opacity
+  smoothing?: 'none' | 'bezier' | 'catmull-rom' | 'cardinal';
+  tension?: number;                   // Curve tension (0-1)
+}
+
+interface FillStyle {
+  enabled?: boolean;                  // Enable area fill
+  color?: string;                     // Fill color
+  opacity?: number;                   // Fill opacity
+}
+```
+
+### Interaction Props
+
+```tsx
+interface InteractionConfig {
+  enabled?: boolean;                  // Enable touch interactions
+  onDrag?: (x: number, y: number, index: number) => void;
+  onDragStart?: (x: number, y: number, index: number) => void;
+  onDragEnd?: (x: number, y: number, index: number) => void;
+  onTap?: (x: number, y: number, index: number) => void;
+  dragLineStyle?: LineStyle;          // Crosshair styling
+}
+```
+
+### Complete Example
+
+```tsx
+<Chart
+  data={{ x: timestamps, y: prices }}
+  width={350}
+  height={200}
+  padding={{ top: 20, right: 20, bottom: 40, left: 60 }}
+  
+  lineStyle={{
+    color: '#007AFF',
+    width: 2,
+    opacity: 1,
+    smoothing: 'bezier',
+    tension: 0.3
+  }}
+  
+  fillStyle={{
+    enabled: true,
+    color: '#007AFF',
+    opacity: 0.1
+  }}
+  
+  gaps={{
+    enabled: true,
+    threshold: 2.5,
+    fixedWidthGaps: true,
+    fixedWidth: 40,
+    style: {
+      color: '#999',
+      width: 1,
+      dashArray: '2 3'
+    }
+  }}
+  
+  interaction={{
+    enabled: true,
+    onDrag: (x, y, index) => {
+      console.log('Dragging:', { x, y, index });
+    },
+    dragLineStyle: {
+      color: '#FF3B30',
+      width: 1,
+      opacity: 0.8
+    }
+  }}
+  
+  axes={{
+    x: {
+      show: true,
+      style: { lineColor: '#E5E5E7', labelStyle: { color: '#8E8E93' } }
+    },
+    y: {
+      show: true,
+      style: { lineColor: '#E5E5E7', labelStyle: { color: '#8E8E93' } }
+    }
+  }}
+/>
+```
+
+## Performance Considerations
+
+- **Worklet Optimization**: Touch interactions run on the UI thread for 60fps performance
+- **Data Scaling**: Coordinate calculations are memoized and optimized
+- **SVG Rendering**: Efficient path generation with minimal DOM updates
+- **Memory Management**: Automatic cleanup of gesture handlers and animations
+
+## TypeScript Support
+
+The library is fully typed with comprehensive TypeScript definitions. All props, configs, and callback signatures include complete type information.
+
+## Migration Notes
+
+### From Proportional to Fixed Width Gaps
+
+```tsx
+// Before (proportional gaps)
+gaps={{ enabled: true, threshold: 2.5 }}
+
+// After (fixed width gaps)
+gaps={{ 
+  enabled: true, 
+  threshold: 2.5,
+  fixedWidthGaps: true,
+  fixedWidth: 40 
+}}
+```
+
+### Breaking Changes
+
+None. Fixed width gaps are an additive feature that doesn't affect existing implementations.
+
+## Troubleshooting
+
+### Gaps Not Appearing
+- Verify `gaps.enabled: true`
+- Check that `threshold` value is appropriate for your data intervals
+- Ensure data actually contains time gaps (missing periods)
+
+### Unexpected Gap Sizes
+- **Proportional gaps**: Gap size reflects actual time duration
+- **Fixed width gaps**: All gaps appear as `fixedWidth` pixels regardless of duration
+
+### Performance Issues
+- Reduce data point density for large datasets
+- Consider data downsampling for initial render
+- Use `React.memo` for chart container components
+
+## Contributing
+
+This library is part of the Ballast investment application. For contributions or issues, please follow the project's standard development workflow.

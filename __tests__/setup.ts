@@ -111,3 +111,35 @@ export const generateInvalidData = () => [
   { x: [1, Infinity], y: [1, 2] }, // Infinity values
   { x: ['a', 'b'], y: [1, 2] }, // Non-numeric values
 ];
+
+// Mock data generators for updated API
+export const createMockScaledPoints = (length = 10) => {
+  return Array.from({ length }, (_, i) => ({
+    x: i * 50,
+    y: 100 + Math.sin(i * 0.1) * 50,
+    originalX: i * 10,
+    originalY: 100 + Math.sin(i * 0.1) * 50,
+    index: i,
+  }));
+};
+
+export const createMockRectangle = () => ({
+  x: 20,
+  y: 10,
+  width: 300,
+  height: 200,
+});
+
+export const createMockLineStyle = (smoothing: 'none' | 'bezier' | 'catmull-rom' | 'cardinal' = 'none') => ({
+  smoothing,
+  color: '#007AFF',
+  width: 2,
+  opacity: 1,
+});
+
+export const createMockGapConfig = (enabled = true) => ({
+  enabled,
+  threshold: 2.5,
+  fixedWidthGaps: false,
+  fixedWidth: 40,
+});

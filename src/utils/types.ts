@@ -135,8 +135,10 @@ export interface AxisConfig {
     show?: boolean;
     labels?: string[];
     style?: AxisStyle;
+    formatter?: (value: number) => string; // Custom formatter function
   };
 }
+
 
 /**
  * Vertical indicator configuration
@@ -152,6 +154,10 @@ export interface VerticalIndicator {
   dashed?: boolean;
   /** Optional label for the indicator */
   label?: string;
+  /** Label position: 'top', 'bottom', or custom y offset from top */
+  labelPosition?: 'top' | 'bottom' | number;
+  /** Label font size */
+  fontSize?: number;
 }
 
 /**
@@ -200,7 +206,12 @@ export interface GapConfig {
     width?: number;
     dashArray?: string;
   };
+  /** Enable fixed width gaps instead of proportional scaling */
+  fixedWidthGaps?: boolean;
+  /** Fixed width in pixels for each gap (when fixedWidthGaps is true) */
+  fixedWidth?: number;
 }
+
 
 // ============================================================================
 // Main Component Props
@@ -242,6 +253,10 @@ export interface ChartProps {
   tooltip?: TooltipConfig;
   /** Gap detection for missing data */
   gaps?: GapConfig;
+  
+  // Scaling overrides
+  /** Override automatic Y-axis range calculation */
+  yRange?: Range;
   
   // Accessibility
   /** Accessibility label for the chart */

@@ -62,12 +62,17 @@ const generateDateLabels = (data: ChartData, scaledData: ScaledPoint[]): Array<{
 /**
  * Generates price labels for Y-axis (lowest, middle, highest)
  */
-const generatePriceLabels = (data: ChartData, scaledData: ScaledPoint[]): Array<{ label: string; scaledY: number; value: number }> => {
+const generatePriceLabels = (
+  data: ChartData, 
+  scaledData: ScaledPoint[], 
+  customFormatter?: (value: number) => string
+): Array<{ label: string; scaledY: number; value: number }> => {
   if (data.y.length === 0) return [];
   
-  const formatPrice = (price: number): string => {
+  // Use custom formatter if provided, otherwise default formatting
+  const formatPrice = customFormatter || ((price: number): string => {
     return `$${price.toFixed(2)}`;
-  };
+  });
   
   const minPrice = Math.min(...data.y);
   const maxPrice = Math.max(...data.y);
@@ -97,7 +102,6 @@ const generatePriceLabels = (data: ChartData, scaledData: ScaledPoint[]): Array<
     }
   ];
 };
-
 /**
  * Renders chart axes with automatic label generation and precise positioning
  */
@@ -127,7 +131,7 @@ export const AxisRenderer: React.FC<AxisRendererProps> = ({
 
   // Generate automatic labels
   const dateLabels = xAxis?.show ? generateDateLabels(data, scaledData) : [];
-  const priceLabels = yAxis?.show ? generatePriceLabels(data, scaledData) : [];
+  const priceLabels = yAxis?.show ? generatePriceLabels(data, scaledData, yAxis?.formatter) : [];
 
   return (
     <G>

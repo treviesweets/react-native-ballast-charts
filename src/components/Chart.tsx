@@ -56,6 +56,7 @@ export const Chart: React.FC<ChartProps> = ({
   indicators = [], 
   interaction, 
   tooltip, 
+  yRange,
   gaps, 
   accessibilityLabel = 'Financial Chart' 
 }) => {
@@ -98,10 +99,11 @@ export const Chart: React.FC<ChartProps> = ({
 
   // Core chart calculations
   const { chartArea } = useChartDimensions({ width, height, padding, axes });
-  const { scaledData, xRange, yRange, scaleX, scaleY, unscaleX, unscaleY } = useDataScaling({ 
+  const { scaledData, xRange, yRange: calculatedYRange, scaleX, scaleY, unscaleX, unscaleY } = useDataScaling({ 
     data, 
     chartArea, 
-    gaps 
+    gaps,
+    yRange
   });
 
   if (DEBUG_CHART) {
@@ -109,7 +111,7 @@ export const Chart: React.FC<ChartProps> = ({
       chartArea,
       scaledDataLength: scaledData.length,
       xRange: `${xRange.min} to ${xRange.max}`,
-      yRange: `${yRange.min} to ${yRange.max}`
+      yRange: `${calculatedYRange.min} to ${calculatedYRange.max}`
     });
   }
 
@@ -180,7 +182,8 @@ export const Chart: React.FC<ChartProps> = ({
               <FillRenderer 
                 scaledData={scaledData} 
                 chartArea={chartArea} 
-                fillStyle={resolvedFillStyle} 
+                fillStyle={resolvedFillStyle}
+                lineStyle={resolvedLineStyle}
               />
             )}
             
@@ -204,7 +207,7 @@ export const Chart: React.FC<ChartProps> = ({
             <AxisRenderer 
               chartArea={chartArea} 
               xRange={xRange} 
-              yRange={yRange} 
+              yRange={calculatedYRange}
               axes={axes} 
               scaledData={scaledData}
               data={data} 

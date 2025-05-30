@@ -41,18 +41,10 @@ interface UseGestureHandlingProps {
 function findCoordinateAtGestureX(gestureX: number, lookupTable: CoordinateEntry[]): CoordinateEntry | null {
   'worklet';
   
-  if (DEBUG_GESTURE_HANDLING) {
-    console.log(`🔍 WORKLET: Searching ${lookupTable.length} entries for gestureX=${gestureX}`);
-  }
-  
   // Linear search through lookup table
   for (let i = 0; i < lookupTable.length; i++) {
     const entry = lookupTable[i];
     if (gestureX >= entry.hitZoneStart && gestureX < entry.hitZoneEnd) {
-      if (DEBUG_GESTURE_HANDLING) {
-        console.log(`✅ WORKLET: Found match at index ${entry.dataIndex}`);
-        console.log(`📍 WORKLET: Hit zone ${entry.hitZoneStart.toFixed(1)}-${entry.hitZoneEnd.toFixed(1)}`);
-      }
       return entry;
     }
   }
@@ -61,22 +53,13 @@ function findCoordinateAtGestureX(gestureX: number, lookupTable: CoordinateEntry
   if (lookupTable.length > 0) {
     const lastEntry = lookupTable[lookupTable.length - 1];
     if (gestureX === lastEntry.hitZoneEnd) {
-      if (DEBUG_GESTURE_HANDLING) {
-        console.log('✅ WORKLET: Found edge case match at last entry');
-      }
       return lastEntry;
-    }
-  }
-  
-  if (DEBUG_GESTURE_HANDLING) {
-    console.log(`❌ WORKLET: No match found for gestureX=${gestureX}`);
-    if (lookupTable.length > 0) {
-      console.log(`📊 WORKLET: Available range ${lookupTable[0].hitZoneStart.toFixed(1)} to ${lookupTable[lookupTable.length-1].hitZoneEnd.toFixed(1)}`);
     }
   }
   
   return null;
 }
+
 
 /**
  * High-performance gesture handling hook for interactive charts
@@ -145,15 +128,7 @@ export const useGestureHandling = ({
   const handleEvent = (event: any, callback?: (x: number, y: number, index: number) => void, eventType?: string) => {
     'worklet';
     
-    if (DEBUG_GESTURE_HANDLING) {
-      console.log(`🎯 WORKLET handleEvent: ${eventType || 'unknown'}`);
-      console.log(`📊 Raw gesture coordinates: event.x=${event.x}, event.y=${event.y}`);
-    }
-    
     if (!callback) {
-      if (DEBUG_GESTURE_HANDLING) {
-        console.log('⚠️ handleEvent: No callback provided');
-      }
       return;
     }
     
@@ -161,22 +136,12 @@ export const useGestureHandling = ({
     const foundEntry = findCoordinateAtGestureX(event.x, lookupTable);
     
     if (foundEntry) {
-      if (DEBUG_GESTURE_HANDLING) {
-        console.log(`🎯 WORKLET: Using coordinates (${foundEntry.scaledX.toFixed(1)}, ${foundEntry.scaledY.toFixed(1)})`);
-      }
-      
       // Update visual position using scaled coordinates with direct assignment
       dragX.value = foundEntry.scaledX;
       dragY.value = foundEntry.scaledY;
       
-      if (DEBUG_GESTURE_HANDLING) {
-        console.log('🚀 WORKLET: Firing callback with real data');
-      }
-      
       // Fire callback with original data values
       runOnJS(callback)(foundEntry.originalX, foundEntry.originalY, foundEntry.dataIndex);
-    } else if (DEBUG_GESTURE_HANDLING) {
-      console.log(`❌ WORKLET: No coordinate found for gesture`);
     }
   };
 
@@ -193,18 +158,15 @@ export const useGestureHandling = ({
     const gesture = Gesture.Pan()
       .onBegin(e => { 
         'worklet'; 
-        if (DEBUG_GESTURE_HANDLING) console.log('▶️ WORKLET Pan gesture BEGIN');
         isActive.value = true; 
         handleEvent(e, onDragStart, 'dragStart'); 
       })
       .onUpdate(e => { 
         'worklet'; 
-        if (DEBUG_GESTURE_HANDLING) console.log('🔄 WORKLET Pan gesture UPDATE');
         handleEvent(e, onDrag, 'drag'); 
       })
       .onEnd(e => { 
-        'worklet'; 
-        if (DEBUG_GESTURE_HANDLING) console.log('⏹️ WORKLET Pan gesture END'); 
+        'worklet';
         isActive.value = false; 
         handleEvent(e, onDragEnd, 'dragEnd'); 
       })
@@ -230,7 +192,6 @@ export const useGestureHandling = ({
     const gesture = Gesture.Tap()
       .onStart(e => { 
         'worklet'; 
-        if (DEBUG_GESTURE_HANDLING) console.log('👆 WORKLET Tap gesture FIRED');
         handleEvent(e, onTap, 'tap'); 
         isActive.value = true; 
         isActive.value = false; 

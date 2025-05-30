@@ -54,8 +54,18 @@ export const IndicatorRenderer: React.FC<IndicatorRendererProps> = ({
             {indicator.label && (
               <SvgText
                 x={xPosition + 4}
-                y={chartArea.y + 12}
-                fontSize={10}
+                y={(() => {
+                  const { labelPosition } = indicator;
+                  if (labelPosition === 'bottom') {
+                    return chartArea.y + chartArea.height - 4;
+                  } else if (typeof labelPosition === 'number') {
+                    return chartArea.y + labelPosition;
+                  } else {
+                    // Default 'top' position
+                    return chartArea.y + 12;
+                  }
+                })()}
+                fontSize={indicator.fontSize || 10}
                 fill={indicator.color || '#6b7280'}
                 textAnchor="start"
               >

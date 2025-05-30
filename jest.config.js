@@ -4,10 +4,10 @@
  */
 
 module.exports = {
-  preset: '@testing-library/react-native',
+  preset: 'react-native',
   
   // Test environment
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   
   // Module directories
   moduleDirectories: ['node_modules', 'src'],
@@ -29,7 +29,7 @@ module.exports = {
   
   // Test file patterns
   testMatch: [
-    '**/__tests__/**/*.(ts|tsx|js)',
+    '**/__tests__/**/*.(test|spec).(ts|tsx|js)',
     '**/*.(test|spec).(ts|tsx|js)',
   ],
   

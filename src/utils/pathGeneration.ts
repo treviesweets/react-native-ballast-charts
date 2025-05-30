@@ -165,6 +165,13 @@ export const generatePath = (
     return `M ${point.x - 1} ${point.y} A 1 1 0 1 0 ${point.x + 1} ${point.y}`;
   }
 
+  // // Debug: Check if fixed width gaps are affecting coordinates
+  // if (gaps?.fixedWidthGaps) {
+  //   console.log('GeneratePath - Fixed width gaps enabled, first 5 points:', 
+  //     scaledData.slice(0, 5).map(p => ({ x: p.x, originalX: p.originalX }))
+  //   );
+  // }
+
   // Sort by original X value to ensure proper line direction
   const sortedData = [...scaledData].sort((a, b) => a.originalX - b.originalX);
 

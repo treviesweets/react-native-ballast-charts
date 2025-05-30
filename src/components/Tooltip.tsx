@@ -78,7 +78,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
           runOnJS(setCurrentData)(interpolated);
         }
       }
-    }
+    },
+    [interpolateAtX] // ✅ Add dependency array for proper cleanup
   );
 
   // Merge styles with defaults

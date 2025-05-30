@@ -89,7 +89,7 @@ export const DragLine: React.FC<DragLineProps> = ({
       : withTiming(0.4, { duration: 200 });
 
     return {
-      transform: [{ translateX: dragX.value }],
+      transform: [{ translateX: dragX.value }] as any,
       opacity,
       backgroundColor: resolvedStyle.color,
       width: resolvedStyle.width,
@@ -114,7 +114,7 @@ export const DragLine: React.FC<DragLineProps> = ({
         { translateX: dragX.value - 4 }, // Center the 8px dot
         { translateY: dragY.value - 4 },
         { scale }
-      ],
+      ] as any,
       opacity,
       backgroundColor: resolvedStyle.color,
     };
